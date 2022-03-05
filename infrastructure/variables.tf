@@ -1,0 +1,1 @@
+variable "aws_lambda_function_S3ToS3_role_var" {}
