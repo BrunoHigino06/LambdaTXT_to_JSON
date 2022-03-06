@@ -54,6 +54,12 @@ resource "aws_s3_bucket_notification" "aws-lambda-trigger" {
     events              = ["s3:ObjectCreated:*"]
 
   }
+
+  depends_on = [
+    aws_lambda_function.S3ToS3,
+    aws_s3_bucket.SourceBucket,
+    aws_s3_bucket.DestBucket
+  ]
 }
 resource "aws_lambda_permission" "LambdaS3Acess" {
   statement_id  = "LambdaS3Acess"
@@ -61,4 +67,11 @@ resource "aws_lambda_permission" "LambdaS3Acess" {
   function_name = aws_lambda_function.S3ToS3.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = "arn:aws:s3:::${aws_s3_bucket.SourceBucket.id}"
+  
+  depends_on = [
+    aws_lambda_function.S3ToS3,
+    aws_s3_bucket.SourceBucket,
+    aws_s3_bucket.DestBucket
+  ]
+    
 }
