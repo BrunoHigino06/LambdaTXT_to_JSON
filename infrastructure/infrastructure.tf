@@ -1,7 +1,7 @@
 # S3 source and destination
 
 resource "aws_s3_bucket" "SourceBucket" {
-  bucket = "sourcebucket20220305"
+  bucket = "sourcebucket2022030"
   force_destroy = true
   
   tags = {
@@ -16,7 +16,7 @@ resource "aws_s3_bucket_acl" "SourceBucketACL" {
 }
 
 resource "aws_s3_bucket" "DestBucket" {
-  bucket = "destbucket20220305"
+  bucket = "destbucket2022030"
   force_destroy = true
   
   tags = {
@@ -36,8 +36,8 @@ resource "aws_lambda_function" "S3ToS3" {
   filename      = "./python/s3tos3.zip"
   function_name = "S3ToS3"
   role          = var.aws_lambda_function_S3ToS3_role_var
-  handler       = "index.test"
   source_code_hash = filebase64sha256("./python/s3tos3.zip")
+  handler = "lambda_function.lambda_handler"
 
   runtime = "python3.8"
 
@@ -53,6 +53,10 @@ resource "aws_lambda_function" "S3ToS3" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "example" {
+  name              = "/aws/lambda/${aws_lambda_function.S3ToS3.function_name}"
+  retention_in_days = 14
+}
 
 # Adding S3 bucket as trigger to my lambda and giving the permissions
 resource "aws_s3_bucket_notification" "aws-lambda-trigger" {
