@@ -22,6 +22,5 @@ def lambda_handler(event, context):
     json.dump(dict1, out_file, indent = 4, sort_keys = False)
     out_file.close()
 
-
-    copy_source_object = {'Bucket': source, 'Key': file_name}
+    copy_source_object = {'Bucket': source, 'Key': file_converted_name}
     s3.copy_object(CopySource=copy_source_object, Bucket=destination, Key=file_converted_name)
