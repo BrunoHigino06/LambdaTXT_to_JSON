@@ -13,3 +13,32 @@ resource "aws_lambda_function" "S3ToS3" {
     }
   }
 }
+
+
+resource "aws_s3_bucket" "SourceBucket" {
+  name = "SourceBucket${timestamp()}"
+  
+  tags = {
+    "name" = "SourceBucket"
+  }
+
+}
+
+resource "aws_s3_bucket_acl" "SourceBucketACL" {
+  bucket = aws_s3_bucket.SourceBucket.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket" "DestBucket" {
+  name = "SourceBucket${timestamp()}"
+  
+  tags = {
+    "name" = "DestBucket"
+  }
+
+}
+
+resource "aws_s3_bucket_acl" "DestBucketACL" {
+  bucket = aws_s3_bucket.DestBucket.id
+  acl    = "private"
+}
