@@ -19,7 +19,7 @@ resource "aws_lambda_function" "S3ToS3" {
 # S3 source and destination
 
 resource "aws_s3_bucket" "SourceBucket" {
-  bucket = "SourceBucket${formatdate("YYYYMMDDhhmmss", timestamp())}"
+  bucket = "sourcebucket${formatdate("YYYYMMDDhhmmss", timestamp())}"
   
   tags = {
     "name" = "SourceBucket"
@@ -33,7 +33,7 @@ resource "aws_s3_bucket_acl" "SourceBucketACL" {
 }
 
 resource "aws_s3_bucket" "DestBucket" {
-  bucket = "SourceBucket${timestamp()}"
+  bucket = "destbucket${formatdate("YYYYMMDDhhmmss", timestamp())}"
   
   tags = {
     "name" = "DestBucket"

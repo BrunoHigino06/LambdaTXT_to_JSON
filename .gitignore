@@ -4,3 +4,4 @@ terraform.tfstate.backup
 terraform.tfstate
 .terraform.lock.hcl
 .terraform/providers/registry.terraform.io/hashicorp/aws/4.1.0/windows_amd64/terraform-provider-aws_v4.1.0_x5.exe
+.terraform.tfstate.lock.info
