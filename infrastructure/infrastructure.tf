@@ -1,25 +1,7 @@
-# Lambda Function
-
-resource "aws_lambda_function" "S3ToS3" {
-  filename      = "./python/s3tos3.zip"
-  function_name = "S3ToS3"
-  role          = var.aws_lambda_function_S3ToS3_role_var
-  handler       = "index.test"
-  source_code_hash = filebase64sha256("./python/s3tos3.zip")
-
-  runtime = "python3.8"
-
-  environment {
-    variables = {
-      name = "S3ToS3"
-    }
-  }
-}
-
 # S3 source and destination
 
 resource "aws_s3_bucket" "SourceBucket" {
-  bucket = "sourcebucket${formatdate("YYYYMMDD", timestamp())}"
+  bucket = "sourcebucket20220305"
   force_destroy = true
   
   tags = {
@@ -34,7 +16,7 @@ resource "aws_s3_bucket_acl" "SourceBucketACL" {
 }
 
 resource "aws_s3_bucket" "DestBucket" {
-  bucket = "destbucket${formatdate("YYYYMMDD", timestamp())}"
+  bucket = "destbucket20220305"
   force_destroy = true
   
   tags = {
@@ -47,6 +29,30 @@ resource "aws_s3_bucket_acl" "DestBucketACL" {
   bucket = aws_s3_bucket.DestBucket.id
   acl    = "private"
 }
+
+# Lambda Function
+
+resource "aws_lambda_function" "S3ToS3" {
+  filename      = "./python/s3tos3.zip"
+  function_name = "S3ToS3"
+  role          = var.aws_lambda_function_S3ToS3_role_var
+  handler       = "index.test"
+  source_code_hash = filebase64sha256("./python/s3tos3.zip")
+
+  runtime = "python3.8"
+
+  environment {
+    variables = {
+      source = aws_s3_bucket.SourceBucket.bucket
+      destination = aws_s3_bucket.DestBucket.bucket
+    }
+  }
+
+  tags = {
+    "name" = "S3ToS3"
+  }
+}
+
 
 # Adding S3 bucket as trigger to my lambda and giving the permissions
 resource "aws_s3_bucket_notification" "aws-lambda-trigger" {
