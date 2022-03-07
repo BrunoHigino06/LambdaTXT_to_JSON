@@ -9,8 +9,9 @@ def lambda_handler(event, context):
     source = os.getenv('source')
     file_name = event['Records'][0]['s3']['object']['key']
     dict1 = {}
-    
-    with open(file_name) as fh:
+    s3_object = s3.get_object(Bucket=source, Key=file_name)
+
+    with open(s3_object) as fh:
   
         for line in fh:
 
