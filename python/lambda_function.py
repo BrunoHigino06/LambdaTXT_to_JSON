@@ -2,20 +2,23 @@ import json
 import boto3
 import os
 
-s3 = boto3.client('s3')
+s3 = boto3.resource('s3')
 
 def lambda_handler(event, context):
     destination = os.getenv('destination')
     source = os.getenv('source')
     file_name = event['Records'][0]['s3']['object']['key']
-    file_object = s3.get_object(Bucket=source, Key=file_name)
+    s3.meta.client.download_file(source, file_name, '/tmp/output.txt')
+    # the file to be converted to 
+    # json format
+    filename = '/tmp/output.txt'
   
-# dictionary where the lines from
-# text will be stored
+    # dictionary where the lines from
+    # text will be stored
     dict1 = {}
-    file_body = file_object['Body']()
-# creating dictionary
-    with file_body as fh:
+  
+    # creating dictionary
+    with open(filename) as fh:
   
         for line in fh:
   
@@ -25,8 +28,9 @@ def lambda_handler(event, context):
   
             dict1[command] = description.strip()
   
-# creating json file
-# the JSON file is named as test1
-    out_file = open("test1.json", "w")
+    # creating json file
+    # the JSON file is named as test1
+    out_file = open("/tmp/output.json", "w")
     json.dump(dict1, out_file, indent = 4, sort_keys = False)
     out_file.close()
+    s3.meta.client.upload_file('/tmp/output.json', destination, 'output.json')
