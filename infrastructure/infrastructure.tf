@@ -1,7 +1,7 @@
 # S3 source and destination
 
 resource "aws_s3_bucket" "SourceBucket" {
-  bucket = "sourcebucket2022030"
+  bucket = "sourcebucket20220307"
   force_destroy = true
   
   tags = {
@@ -16,7 +16,7 @@ resource "aws_s3_bucket_acl" "SourceBucketACL" {
 }
 
 resource "aws_s3_bucket" "DestBucket" {
-  bucket = "destbucket2022030"
+  bucket = "destbucket20220307"
   force_destroy = true
   
   tags = {
