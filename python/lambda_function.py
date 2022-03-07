@@ -13,9 +13,9 @@ def lambda_handler(event, context):
 # dictionary where the lines from
 # text will be stored
     dict1 = {}
-  
+    file_body = file_object['Body']()
 # creating dictionary
-    with open(file_object) as fh:
+    with file_body as fh:
   
         for line in fh:
   
