@@ -30,7 +30,7 @@ def lambda_handler(event, context):
   
     # creating json file
 
-    out_file = open("/tmp/{file_name}.json", "w")
+    out_file = open('/tmp/"{file_name}".json', "w")
     json.dump(dict1, out_file, indent = 4, sort_keys = False)
     out_file.close()
-    s3.meta.client.upload_file('/tmp/{file_name}.json', destination, "{file_name}.json")
+    s3.meta.client.upload_file('/tmp/"{file_name}".json', destination, '"{file_name}".json')
